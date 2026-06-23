@@ -41,7 +41,8 @@ import fulguris.R
 open class DetailSwitchPreference(
     context: Context,
     private val onSwitchChanged: (Boolean) -> Unit,
-    private val onPreferenceClicked: (() -> Unit)? = null
+    private val onPreferenceClicked: (() -> Unit)? = null,
+    private val switchEnabled: Boolean = true
 ) : SwitchPreference(context) {
 
     init {
@@ -58,6 +59,7 @@ open class DetailSwitchPreference(
 
         val switch: MaterialSwitch? = holder.itemView.findViewById(R.id.detail_switch_widget)
         switch?.isChecked = isChecked
+        switch?.isEnabled = switchEnabled
         switch?.setOnClickListener {
             val newValue = (it as MaterialSwitch).isChecked
             isChecked = newValue
