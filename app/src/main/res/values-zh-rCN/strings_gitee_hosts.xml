@@ -1,11 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <string name="dialog_add_domain_to_gitee_hosts">
         添加域名到 Gitee Hosts
     </string>
 
-    <string name="gitee_hosts_added">
-        已添加：0.0.0.0 %1$s
+    <string name="gitee_hosts_added_and_filter_updated">
+        已上传并更新过滤器：0.0.0.0 %1$s
+    </string>
+
+    <string name="gitee_hosts_added_filter_not_found">
+        已上传：0.0.0.0 %1$s，但未找到已订阅的 Gitee Hosts 过滤器
+    </string>
+
+    <string name="gitee_hosts_added_filter_update_failed">
+        已上传：0.0.0.0 %1$s，但本机过滤器更新失败
     </string>
 
     <string name="gitee_hosts_already_exists">
@@ -24,15 +33,4 @@
         更新 Gitee Hosts 失败：%1$s
     </string>
 
-    <string name="gitee_hosts_added_and_filter_updated">
-        已上传并更新过滤器：0.0.0.0 %1$s
-    </string>
-    
-    <string name="gitee_hosts_added_filter_not_found">
-        已上传：0.0.0.0 %1$s，但未找到已订阅的 Gitee Hosts 过滤器
-    </string>
-    
-    <string name="gitee_hosts_added_filter_update_failed">
-        已上传：0.0.0.0 %1$s，但本机过滤器更新失败
-    </string>
 </resources>
