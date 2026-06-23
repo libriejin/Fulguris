@@ -51,6 +51,10 @@ android.productFlavors.all { flavor ->
 
 // TODO: Find a way to put it the variant/type folder such as: generated/source/locale/slionsFullDownload/debug/acr/browser/lightning/locale
 def generatedLocaleListDir = layout.buildDirectory.dir('generated/source/locale/fulguris/locale')
+def giteeAccessToken = System.getenv("GITEE_ACCESS_TOKEN") ?: ""
+def escapedGiteeAccessToken = giteeAccessToken
+        .replace("\\", "\\\\")
+        .replace("\"", "\\\"")
 
 android {
     compileSdk = libs.versions.compileSdk.get().toInteger()
@@ -61,6 +65,9 @@ android {
         minSdk = libs.versions.minSdk.get().toInteger()
         targetSdk = libs.versions.compileSdk.get().toInteger()
         vectorDrawables.useSupportLibrary = true
+    
+        buildConfigField "String", "GITEE_ACCESS_TOKEN",
+                "\"${escapedGiteeAccessToken}\""
     }
 
     sourceSets {
