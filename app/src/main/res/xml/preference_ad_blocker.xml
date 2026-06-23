@@ -19,8 +19,9 @@ Should only be shown on first application start-up.
         android:title="@string/pref_title_enable_ad_blocker"
         android:summaryOn="@string/pref_summary_on_enable_ad_blocker"
         android:summaryOff="@string/pref_summary_off_enable_ad_blocker"
+        android:defaultValue="true"
+        android:selectable="false"
         app:icon="@drawable/ic_block"
-        android:defaultValue="false"
         app:iconSpaceReserved="true"
         app:singleLineTitle="false" />
 
