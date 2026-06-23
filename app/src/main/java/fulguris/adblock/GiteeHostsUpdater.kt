@@ -13,13 +13,18 @@ import java.util.Locale
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Singleton
+import java.io.File
 
 @Singleton
 class GiteeHostsUpdater @Inject constructor(
+    private val abpListUpdater: AbpListUpdater,
+    private val abpBlockerManager: AbpBlockerManager
 ) {
 
     enum class Status {
-        ADDED,
+        ADDED_AND_FILTER_UPDATED,
+        ADDED_FILTER_NOT_FOUND,
+        ADDED_FILTER_UPDATE_FAILED,
         ALREADY_EXISTS,
         INVALID_LINK,
         MISSING_TOKEN,
@@ -68,6 +73,9 @@ class GiteeHostsUpdater @Inject constructor(
                 val remoteFile = readRemoteFile(token)
 
                 if (containsDomain(remoteFile.content, domain)) {
+                    // 即使 Gitee 中已经存在，也尝试更新本机过滤器。
+                    refreshSubscribedFilter(remoteFile.content)
+                
                     return Result(
                         status = Status.ALREADY_EXISTS,
                         domain = domain
@@ -87,10 +95,25 @@ class GiteeHostsUpdater @Inject constructor(
                 )
 
                 if (response.first in 200..299) {
-                    return Result(
-                        status = Status.ADDED,
-                        domain = domain
-                    )
+                    return when (refreshSubscribedFilter(newContent)) {
+                        FilterRefreshStatus.UPDATED ->
+                            Result(
+                                status = Status.ADDED_AND_FILTER_UPDATED,
+                                domain = domain
+                            )
+                
+                        FilterRefreshStatus.NOT_FOUND ->
+                            Result(
+                                status = Status.ADDED_FILTER_NOT_FOUND,
+                                domain = domain
+                            )
+                
+                        FilterRefreshStatus.FAILED ->
+                            Result(
+                                status = Status.ADDED_FILTER_UPDATE_FAILED,
+                                domain = domain
+                            )
+                    }
                 }
 
                 // 409 通常表示文件已被其他提交修改，下一轮重新获取 SHA。
@@ -285,11 +308,104 @@ class GiteeHostsUpdater @Inject constructor(
         }
     }
 
+    private enum class FilterRefreshStatus {
+        UPDATED,
+        NOT_FOUND,
+        FAILED
+    }
+    
+    /**
+     * 使用刚刚上传到 Gitee 的最新 hosts 内容，
+     * 直接更新 Fulguris 中已订阅的远程过滤器。
+     */
+    private fun refreshSubscribedFilter(
+        content: String
+    ): FilterRefreshStatus {
+    
+        val entity = abpListUpdater.abpDao
+            .getAll()
+            .firstOrNull { item ->
+                normalizeFilterUrl(item.url) ==
+                        normalizeFilterUrl(RAW_FILTER_URL)
+            }
+            ?: return FilterRefreshStatus.NOT_FOUND
+    
+        val originalUrl = entity.url
+    
+        val tempFile = try {
+            File.createTempFile(
+                "gitee-hosts-",
+                ".txt",
+                abpListUpdater.context.cacheDir
+            )
+        } catch (_: Exception) {
+            return FilterRefreshStatus.FAILED
+        }
+    
+        val updated = try {
+            // 将 Gitee 中的新内容写入临时 Hosts 文件。
+            tempFile.writeText(
+                content,
+                Charsets.UTF_8
+            )
+    
+            // 确保临时文件修改时间晚于旧过滤器更新时间。
+            tempFile.setLastModified(
+                System.currentTimeMillis() + 1_000
+            )
+    
+            // 防止此前该过滤器处于关闭状态。
+            entity.enabled = true
+    
+            // 临时让更新器读取本地文件，避免 Gitee raw 缓存。
+            entity.url = Uri.fromFile(tempFile).toString()
+    
+            abpListUpdater.updateAbpEntity(
+                entity,
+                true
+            )
+        } catch (_: Exception) {
+            false
+        } finally {
+            // 恢复正常的 Gitee raw 订阅地址，
+            // 以后自动更新仍然从 Gitee 下载。
+            entity.url = originalUrl
+            entity.enabled = true
+    
+            abpListUpdater.abpDao.update(entity)
+    
+            tempFile.delete()
+        }
+    
+        if (!updated) {
+            return FilterRefreshStatus.FAILED
+        }
+    
+        return try {
+            abpBlockerManager.reloadListsNow()
+            FilterRefreshStatus.UPDATED
+        } catch (_: Exception) {
+            FilterRefreshStatus.FAILED
+        }
+    }
+    
+    private fun normalizeFilterUrl(
+        url: String
+    ): String {
+        return url
+            .substringBefore('#')
+            .substringBefore('?')
+            .trimEnd('/')
+    }
+
     companion object {
         private const val OWNER = "libriejin_1"
         private const val REPOSITORY = "filter-gate"
         private const val BRANCH = "master"
         private const val FILE_PATH = "hosts"
+        
+        private const val RAW_FILTER_URL =
+            "https://gitee.com/libriejin_1/filter-gate/raw/master/hosts"
 
         private const val API_URL =
             "https://gitee.com/api/v5/repos/" +
