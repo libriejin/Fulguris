@@ -27,7 +27,11 @@ jobs:
         run: chmod +x gradlew
 
       - name: Build Slions download variants
-        run: ./gradlew assembleSlionsFullDownload
+        env:
+          GITEE_ACCESS_TOKEN: ${{ secrets.GITEE_ACCESS_TOKEN }}
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleSlionsFullDownload
 
       - name: Show generated APK files
         if: always()
