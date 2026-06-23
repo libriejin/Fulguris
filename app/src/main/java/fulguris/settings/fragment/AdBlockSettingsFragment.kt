@@ -74,19 +74,19 @@ class AdBlockSettingsFragment : AbstractSettingsFragment() {
         super.onCreatePreferences(savedInstanceState, rootKey)
 
         //injector.inject(this)
-
+        userPreferences.adBlockEnabled = true
+        
         switchPreference(
             preference = getString(R.string.pref_key_content_control),
-            isChecked = userPreferences.adBlockEnabled,
-            onCheckChange = {
-                userPreferences.adBlockEnabled = it
-                // update enabled lists when enabling blocker
-                if (it) {
-                    updateFilterList(null, false)
-                    reloadLists = true
+            isChecked = true,
+            onCheckChange = { _ ->
+                userPreferences.adBlockEnabled = true
                 }
-            }
-        )
+            )
+
+            findPreference<Preference>(
+                getString(R.string.pref_key_content_control)
+            )?.isSelectable = false
 
         filtersCategory = findPreference<PreferenceGroup>(getString(R.string.pref_key_content_control_filters))!!
 
@@ -193,21 +193,26 @@ class AdBlockSettingsFragment : AbstractSettingsFragment() {
 
         // list of blocklists/entities
         for (entity in abpDao.getAll().sortedBy { it.title?.lowercase() }) {
+            if (!entity.enabled) {
+                entity.enabled = true
+                abpDao.update(entity)
+                updateFilterList(entity, false)
+                reloadBlockLists()
+            }
             val entityPref = DetailSwitchPreference(
                 requireContext(),
-                onSwitchChanged = { enabled ->
-                    entity.enabled = enabled
+                onSwitchChanged = { _ ->
+                    entity.enabled = true
                     abpDao.update(entity)
-                    if (enabled)
-                        updateFilterList(entity, false) // check for update, entity may have been disabled for a longer time
-                    reloadBlockLists()
+                    entityPrefs[entity.entityId]?.isChecked = true
                 },
                 onPreferenceClicked = {
                     showBlockList(entity)
-                }
+                },
+                switchEnabled = false
             ).apply {
                 title = entity.title
-                isChecked = entity.enabled
+                isChecked = true
                 isSingleLineTitle = false
             }
             entityPrefs[entity.entityId] = entityPref
@@ -375,6 +380,7 @@ class AdBlockSettingsFragment : AbstractSettingsFragment() {
 
             if (entity.entityId == 0) // id == 0 if new entity was added, we want to update it immediately
                 needsUpdate = true
+            entity.enabled = true
             val newId = abpDao.update(entity)
 
             // check for update (after abpDao.update!)
