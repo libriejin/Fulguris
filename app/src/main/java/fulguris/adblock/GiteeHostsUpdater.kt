@@ -3,7 +3,6 @@ package fulguris.adblock
 import android.net.Uri
 import android.util.Base64
 import fulguris.BuildConfig
-import jp.hazuki.yuzubrowser.adblock.core.ContentRequest
 import okhttp3.FormBody
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -17,7 +16,6 @@ import javax.inject.Singleton
 
 @Singleton
 class GiteeHostsUpdater @Inject constructor(
-    private val abpUserRules: AbpUserRules
 ) {
 
     enum class Status {
@@ -89,15 +87,6 @@ class GiteeHostsUpdater @Inject constructor(
                 )
 
                 if (response.first in 200..299) {
-                    // 让当前手机立即开始拦截该域名。
-                    abpUserRules.addUserRule(
-                        pageDomain = "",
-                        requestDomain = domain,
-                        contentType = ContentRequest.TYPE_ALL,
-                        thirdParty = false,
-                        response = true
-                    )
-
                     return Result(
                         status = Status.ADDED,
                         domain = domain
