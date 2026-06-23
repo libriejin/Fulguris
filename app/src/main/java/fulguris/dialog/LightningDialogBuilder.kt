@@ -421,9 +421,21 @@ class LightningDialogBuilder @Inject constructor(
                         val result = giteeHostsUpdater.addDomainFromLink(linkUrl)
                 
                         val message = when (result.status) {
-                            GiteeHostsUpdater.Status.ADDED ->
+                            GiteeHostsUpdater.Status.ADDED_AND_FILTER_UPDATED ->
                                 activity.getString(
-                                    R.string.gitee_hosts_added,
+                                    R.string.gitee_hosts_added_and_filter_updated,
+                                    result.domain
+                                )
+                            
+                            GiteeHostsUpdater.Status.ADDED_FILTER_NOT_FOUND ->
+                                activity.getString(
+                                    R.string.gitee_hosts_added_filter_not_found,
+                                    result.domain
+                                )
+                            
+                            GiteeHostsUpdater.Status.ADDED_FILTER_UPDATE_FAILED ->
+                                activity.getString(
+                                    R.string.gitee_hosts_added_filter_update_failed,
                                     result.domain
                                 )
                 
