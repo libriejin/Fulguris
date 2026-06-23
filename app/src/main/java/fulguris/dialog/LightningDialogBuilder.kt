@@ -40,6 +40,8 @@ import io.reactivex.rxkotlin.subscribeBy
 import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
+import android.widget.Toast
+import fulguris.adblock.GiteeHostsUpdater
 
 /**
  * A builder of various dialogs.
@@ -51,6 +53,7 @@ class LightningDialogBuilder @Inject constructor(
     private val historyModel: HistoryRepository,
     private val userPreferences: UserPreferences,
     private val downloadHandler: fulguris.download.DownloadHandler,
+    private val giteeHostsUpdater: GiteeHostsUpdater,
     private val clipboardManager: ClipboardManager,
     @DatabaseScheduler private val databaseScheduler: Scheduler,
     @MainScheduler private val mainScheduler: Scheduler
@@ -407,6 +410,54 @@ class LightningDialogBuilder @Inject constructor(
                 DialogItem(title = R.string.dialog_copy_link, text = linkUrl) {
                     clipboardManager.copyToClipboard(linkUrl)
                     activity.snackbar(R.string.message_link_copied)
+                },
+                
+                DialogItem(
+                    title = R.string.dialog_add_domain_to_gitee_hosts,
+                    text = linkUrl.toUri().host.orEmpty(),
+                    show = !linkUrl.toUri().host.isNullOrBlank()
+                ) {
+                    Thread({
+                        val result = giteeHostsUpdater.addDomainFromLink(linkUrl)
+                
+                        val message = when (result.status) {
+                            GiteeHostsUpdater.Status.ADDED ->
+                                activity.getString(
+                                    R.string.gitee_hosts_added,
+                                    result.domain
+                                )
+                
+                            GiteeHostsUpdater.Status.ALREADY_EXISTS ->
+                                activity.getString(
+                                    R.string.gitee_hosts_already_exists,
+                                    result.domain
+                                )
+                
+                            GiteeHostsUpdater.Status.INVALID_LINK ->
+                                activity.getString(
+                                    R.string.gitee_hosts_invalid_link
+                                )
+                
+                            GiteeHostsUpdater.Status.MISSING_TOKEN ->
+                                activity.getString(
+                                    R.string.gitee_hosts_missing_token
+                                )
+                
+                            GiteeHostsUpdater.Status.FAILED ->
+                                activity.getString(
+                                    R.string.gitee_hosts_failed,
+                                    result.detail
+                                )
+                        }
+                
+                        activity.runOnUiThread {
+                            Toast.makeText(
+                                activity,
+                                message,
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+                    }, "GiteeHostsUpdater").start()
                 }
             )),
             // Image tab
