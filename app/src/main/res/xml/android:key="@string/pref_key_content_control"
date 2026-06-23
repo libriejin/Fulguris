@@ -4,11 +4,12 @@
 
 
     <x.SwitchPreference
-        android:defaultValue="false"
+        android:defaultValue="true"
         android:key="@string/pref_key_content_control"
         android:title="@string/settings_adblock"
         android:summaryOn="@string/pref_summary_on_enable_ad_blocker"
         android:summaryOff="@string/pref_summary_off_enable_ad_blocker"
+        android:selectable="false"
         app:icon="@drawable/ic_block"
         app:singleLineTitle="false" />
 
