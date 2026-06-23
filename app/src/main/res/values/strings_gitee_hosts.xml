@@ -1,11 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <string name="dialog_add_domain_to_gitee_hosts">
         Add domain to Gitee Hosts
     </string>
 
-    <string name="gitee_hosts_added">
-        Added: 0.0.0.0 %1$s
+    <string name="gitee_hosts_added_and_filter_updated">
+        Uploaded and filter updated: 0.0.0.0 %1$s
+    </string>
+
+    <string name="gitee_hosts_added_filter_not_found">
+        Uploaded: 0.0.0.0 %1$s, but the subscribed Gitee Hosts filter was not found
+    </string>
+
+    <string name="gitee_hosts_added_filter_update_failed">
+        Uploaded: 0.0.0.0 %1$s, but the local filter could not be updated
     </string>
 
     <string name="gitee_hosts_already_exists">
@@ -23,4 +32,5 @@
     <string name="gitee_hosts_failed">
         Failed to update Gitee Hosts: %1$s
     </string>
+
 </resources>
