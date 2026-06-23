@@ -95,6 +95,18 @@ class AbpBlockerManager @Inject constructor(
         blockerPrefixes.forEach { File(filterDir, it).delete() }
     }
 
+    @Synchronized
+    fun reloadListsNow() {
+        // 重新加载期间暂停网页请求，避免读取到一半更新的规则。
+        listsLoaded = false
+    
+        // 删除由旧过滤器生成的合并缓存。
+        removeJointLists()
+    
+        // 重新读取各过滤器文件并生成新的合并规则。
+        loadLists()
+    }
+
     // load lists
     //  and create files containing filters from all enabled entities (without duplicates)
     fun loadLists() {
