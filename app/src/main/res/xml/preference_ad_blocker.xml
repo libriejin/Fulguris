@@ -1,28 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-This is loaded and displayed by our ad blocker onboarding intro slide.
-It is not intended to be shown in application menu or settings.
-Should only be shown on first application start-up.
--->
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.preference.PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <Preference
-        android:key="ad_blocker_description"
-        android:title="@string/intro_description_ad_blocker"
-        android:selectable="false"
-        app:iconSpaceReserved="false"
-        app:singleLineTitle="false" />
-
     <x.SwitchPreference
+        android:defaultValue="true"
         android:key="@string/pref_key_content_control"
-        android:title="@string/pref_title_enable_ad_blocker"
+        android:title="@string/settings_adblock"
         android:summaryOn="@string/pref_summary_on_enable_ad_blocker"
         android:summaryOff="@string/pref_summary_off_enable_ad_blocker"
-        android:defaultValue="true"
         android:selectable="false"
         app:icon="@drawable/ic_block"
-        app:iconSpaceReserved="true"
         app:singleLineTitle="false" />
 
-</PreferenceScreen>
+    <Preference
+        android:key="@string/pref_key_blocklist_auto_update"
+        android:title="@string/blocklist_update_mode"
+        android:dependency="@string/pref_key_content_control"
+        app:icon="@drawable/ic_action_refresh"
+        app:singleLineTitle="false" />
+
+    <Preference
+        android:key="@string/pref_key_blocklist_auto_update_frequency"
+        android:title="@string/blocklist_update_frequency"
+        android:dependency="@string/pref_key_content_control"
+        app:icon="@drawable/ic_update"
+        app:singleLineTitle="false" />
+
+    <Preference
+        android:key="@string/pref_key_modify_filters"
+        android:title="@string/use_modify_filters"
+        android:dependency="@string/pref_key_content_control"
+        app:singleLineTitle="false" />
+
+    <x.PreferenceCategory
+        android:key="@string/pref_key_content_control_filters"
+        android:title="@string/pref_category_filters"
+        android:summary="@string/pref_category_summary_filters"
+        android:dependency="@string/pref_key_content_control"
+        app:singleLineTitle="false">
+
+    </x.PreferenceCategory>
+
+</androidx.preference.PreferenceScreen>
