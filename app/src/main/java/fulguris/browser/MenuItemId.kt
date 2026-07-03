@@ -45,6 +45,7 @@ enum class MenuItemId {
     Share,
     Find,
     DomainSettings,
+    AddCurrentDomainToGiteeHosts,
     Translate,
     ReaderMode,
     AdBlock,
