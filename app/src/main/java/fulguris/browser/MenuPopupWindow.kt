@@ -347,7 +347,6 @@ class MenuPopupWindow : PopupWindow {
 
             // Hide tab menu items that don't apply in incognito
             iBinding.menuItemDomainSettings.isVisible = false
-            iBinding.menuItemAddCurrentDomainToGiteeHosts.isVisible = false
             iBinding.menuItemReaderMode.isVisible = false
             iBinding.menuItemShare.isVisible = false
             iBinding.menuItemPrint.isVisible = false
