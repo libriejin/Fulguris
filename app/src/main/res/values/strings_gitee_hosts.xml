@@ -33,4 +33,8 @@
         Failed to update Gitee Hosts: %1$s
     </string>
 
+    <string name="action_add_current_domain_to_gitee_hosts">
+    Add current domain to Gitee Hosts
+    </string>
+
 </resources>
