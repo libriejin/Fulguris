@@ -237,6 +237,14 @@
                         tools:visibility="visible"
                         app:drawableStartCompat="@drawable/ic_domain"
                         android:text="@string/action_domain_settings" />
+                    
+                    <TextView
+                        android:id="@+id/menuItemAddCurrentDomainToGiteeHosts"
+                        style="@style/BrowserTextMenuItem"
+                        android:visibility="gone"
+                        tools:visibility="visible"
+                        app:drawableStartCompat="@drawable/ic_block"
+                        android:text="@string/action_add_current_domain_to_gitee_hosts" />
 
                     <TextView
                         android:id="@+id/menuItemShare"
