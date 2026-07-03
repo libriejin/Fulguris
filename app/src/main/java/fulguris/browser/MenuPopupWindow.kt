@@ -261,6 +261,7 @@ class MenuPopupWindow : PopupWindow {
         // Tab menu items
         iBinding.menuItemPageHistory.isVisible = false
         iBinding.menuItemDomainSettings.isVisible = false
+        iBinding.menuItemAddCurrentDomainToGiteeHosts.isVisible = false
         iBinding.menuItemFind.isVisible = false
         iBinding.menuItemPrint.isVisible = false
         iBinding.menuItemReaderMode.isVisible = false
@@ -303,6 +304,7 @@ class MenuPopupWindow : PopupWindow {
             // Tab menu items
             MenuItemId.TabHistory -> iBinding.menuItemPageHistory.isVisible = true
             MenuItemId.DomainSettings -> iBinding.menuItemDomainSettings.isVisible = true
+            MenuItemId.AddCurrentDomainToGiteeHosts -> iBinding.menuItemAddCurrentDomainToGiteeHosts.isVisible = true
             MenuItemId.Find -> iBinding.menuItemFind.isVisible = true
             MenuItemId.Print -> iBinding.menuItemPrint.isVisible = true
             MenuItemId.ReaderMode -> iBinding.menuItemReaderMode.isVisible = true
