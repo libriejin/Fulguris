@@ -235,6 +235,15 @@ object MenuItems {
             canBeInTabMenu = true,
             defaultMenu = MenuType.TabMenu
         ),
+        MenuItemId.AddCurrentDomainToGiteeHosts to MenuItem(
+            id = MenuItemId.AddCurrentDomainToGiteeHosts,
+            labelId = R.string.action_add_current_domain_to_gitee_hosts,
+            iconId = R.drawable.ic_block,
+            viewId = R.id.menuItemAddCurrentDomainToGiteeHosts,
+            canBeInMainMenu = true,
+            canBeInTabMenu = true,
+            defaultMenu = MenuType.TabMenu
+        ),
         MenuItemId.AddBookmark to MenuItem(
             id = MenuItemId.AddBookmark,
             labelId = R.string.action_add_bookmark,
