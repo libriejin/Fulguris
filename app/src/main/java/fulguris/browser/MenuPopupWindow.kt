@@ -347,6 +347,7 @@ class MenuPopupWindow : PopupWindow {
 
             // Hide tab menu items that don't apply in incognito
             iBinding.menuItemDomainSettings.isVisible = false
+            iBinding.menuItemAddCurrentDomainToGiteeHosts.isVisible = false
             iBinding.menuItemReaderMode.isVisible = false
             iBinding.menuItemShare.isVisible = false
             iBinding.menuItemPrint.isVisible = false
@@ -356,12 +357,23 @@ class MenuPopupWindow : PopupWindow {
 
         // Rules based on current tab state
         (contentView.context as WebBrowserActivity).tabsManager.let { tm ->
+
+            val currentUrl = tm.currentTab?.url
+        
+            if (
+                currentUrl.isNullOrBlank() ||
+                Uri.parse(currentUrl).host.isNullOrBlank()
+            ) {
+                iBinding.menuItemAddCurrentDomainToGiteeHosts.isVisible = false
+            }
+        
             tm.currentTab?.let { tab ->
                 val isSpecialUrl = tab.url.isSpecialUrl() || tab.url.isAppScheme()
 
                 // Hide certain items for special URLs (internal pages, about:, file:, etc.)
                 if (isSpecialUrl) {
                     iBinding.menuItemDomainSettings.isVisible = false
+                    iBinding.menuItemAddCurrentDomainToGiteeHosts.isVisible = false
                     iBinding.menuItemDesktopMode.isVisible = false
                     iBinding.menuItemDarkMode.isVisible = false
                     iBinding.menuItemAddToHome.isVisible = false
