@@ -76,6 +76,7 @@ import fulguris.*
 import fulguris.BuildConfig
 import fulguris.R
 import fulguris.adblock.AbpUserRules
+import fulguris.adblock.GiteeHostsUpdater
 import fulguris.browser.*
 import fulguris.browser.bookmarks.BookmarksDrawerView
 import fulguris.browser.cleanup.ExitCleanup
@@ -212,6 +213,7 @@ abstract class WebBrowserActivity : ThemedBrowserActivity(),
     @Inject lateinit var bookmarksDialogBuilder: LightningDialogBuilder
     @Inject lateinit var exitCleanup: ExitCleanup
     @Inject lateinit var abpUserRules: AbpUserRules
+    @Inject lateinit var giteeHostsUpdater: GiteeHostsUpdater
     //
     @Inject lateinit var tabsManager: TabsManager
     @Inject lateinit var sessionsManager: SessionsManager
@@ -692,6 +694,13 @@ abstract class WebBrowserActivity : ThemedBrowserActivity(),
                 dismiss()
                 currentHost()?.let { showDomainSettings(it) }
             }
+
+            onMenuItemClicked(
+                iBinding.menuItemAddCurrentDomainToGiteeHosts
+            ) {
+                dismiss()
+                addCurrentPageDomainToGiteeHosts()
+            }
             onMenuItemClicked(iBinding.menuItemPageRequests) {
                 dismiss()
                 showPageRequests()
@@ -733,6 +742,70 @@ abstract class WebBrowserActivity : ThemedBrowserActivity(),
             // Make it full screen gesture friendly
             setOnDismissListener { justClosedMenuCountdown() }
         }
+    }
+
+    /**
+ * Add the current page domain to the personal Gitee Hosts file,
+ * then refresh the subscribed filter.
+ */
+    private fun addCurrentPageDomainToGiteeHosts() {
+        val currentUrl = tabsManager.currentTab?.url.orEmpty()
+    
+        Thread({
+            val result = giteeHostsUpdater.addDomainFromLink(currentUrl)
+    
+            val message = when (result.status) {
+                GiteeHostsUpdater.Status.ADDED_AND_FILTER_UPDATED ->
+                    getString(
+                        R.string.gitee_hosts_added_and_filter_updated,
+                        result.domain
+                    )
+    
+                GiteeHostsUpdater.Status.ADDED_FILTER_NOT_FOUND ->
+                    getString(
+                        R.string.gitee_hosts_added_filter_not_found,
+                        result.domain
+                    )
+    
+                GiteeHostsUpdater.Status.ADDED_FILTER_UPDATE_FAILED ->
+                    getString(
+                        R.string.gitee_hosts_added_filter_update_failed,
+                        result.domain
+                    )
+    
+                GiteeHostsUpdater.Status.ALREADY_EXISTS ->
+                    getString(
+                        R.string.gitee_hosts_already_exists,
+                        result.domain
+                    )
+    
+                GiteeHostsUpdater.Status.INVALID_LINK ->
+                    getString(
+                        R.string.gitee_hosts_invalid_link
+                    )
+    
+                GiteeHostsUpdater.Status.MISSING_TOKEN ->
+                    getString(
+                        R.string.gitee_hosts_missing_token
+                    )
+    
+                GiteeHostsUpdater.Status.FAILED ->
+                    getString(
+                        R.string.gitee_hosts_failed,
+                        result.detail
+                    )
+            }
+    
+            runOnUiThread {
+                if (!isFinishing && !isDestroyed) {
+                    Toast.makeText(
+                        this,
+                        message,
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            }
+        }, "GiteeCurrentPageUpdater").start()
     }
 
     /**
