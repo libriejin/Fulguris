@@ -204,8 +204,8 @@ object MenuItems {
             labelId = R.string.block_ads,
             iconId = R.drawable.ic_block,
             viewId = R.id.menuItemAdBlock,
-            canBeInMainMenu = true,
-            canBeInTabMenu = true,
+            canBeInMainMenu = false,
+            canBeInTabMenu = false,
             defaultMenu = MenuType.TabMenu
         ),
         MenuItemId.DarkMode to MenuItem(
