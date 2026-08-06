@@ -721,7 +721,7 @@ abstract class WebBrowserActivity : ThemedBrowserActivity(),
             onMenuItemClicked(iBinding.menuItemReaderMode) { dismiss(); executeAction(R.id.action_reading_mode) }
             onMenuItemClicked(iBinding.menuItemDesktopMode) { dismiss(); executeAction(R.id.action_toggle_desktop_mode) }
             onMenuItemClicked(iBinding.menuItemDarkMode) { dismiss(); executeAction(R.id.action_toggle_dark_mode) }
-            onMenuItemClicked(iBinding.menuItemAdBlock) { dismiss(); executeAction(R.id.action_block) }
+            iBinding.menuItemAdBlock.setOnClickListener(null)
             onMenuItemClicked(iBinding.menuItemTranslate) { dismiss(); executeAction(R.id.action_translate) }
             onMenuItemClicked(iBinding.menuItemForceReload) { dismiss(); executeAction(R.id.action_force_reload) }
             onMenuItemClicked(iBinding.menuItemLaunchApp) { dismiss(); executeAction(R.id.action_launch_app) }
@@ -2603,8 +2603,6 @@ abstract class WebBrowserActivity : ThemedBrowserActivity(),
 
             R.id.action_block -> {
 
-                abpUserRules.allowPage(Uri.parse(tabsManager.currentTab?.url), !iMenuCustom.iBinding.menuItemAdBlock.isChecked)
-                tabsManager.currentTab?.reload()
                 return true
             }
 
