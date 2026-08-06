@@ -313,7 +313,7 @@ class MenuPopupWindow : PopupWindow {
             MenuItemId.AddToHome -> iBinding.menuItemAddToHome.isVisible = true
             MenuItemId.AddBookmark -> iBinding.menuItemAddBookmark.isVisible = true
             MenuItemId.Share -> iBinding.menuItemShare.isVisible = true
-            MenuItemId.AdBlock -> iBinding.menuItemAdBlock.isVisible = true
+            MenuItemId.AdBlock -> iBinding.menuItemAdBlock.isVisible = false
             MenuItemId.Translate -> iBinding.menuItemTranslate.isVisible = true
             MenuItemId.Requests -> iBinding.menuItemPageRequests.isVisible = true
             MenuItemId.Console -> iBinding.menuItemConsole.isVisible = true
