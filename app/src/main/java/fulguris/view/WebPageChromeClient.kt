@@ -38,6 +38,7 @@ import fulguris.view.webrtc.WebRtcPermissionsModel
 import fulguris.view.webrtc.WebRtcPermissionsView
 import io.reactivex.Scheduler
 import timber.log.Timber
+import android.content.pm.ActivityInfo
 
 /**
  * We have one instance of this per [WebView].
@@ -379,9 +380,21 @@ class WebPageChromeClient(
 
 
     @Deprecated("Deprecated in Java")
-    override fun onShowCustomView(view: View, requestedOrientation: Int, callback: CustomViewCallback) {
+    override fun onShowCustomView(
+        view: View,
+        requestedOrientation: Int,
+        callback: CustomViewCallback
+    ) {
         Timber.d("onShowCustomView: $requestedOrientation")
-        webBrowser.onShowCustomView(view, callback, requestedOrientation)
+    
+        // Personal build:
+        // Ignore the orientation requested by the website.
+        // Always lock fullscreen video to fixed landscape.
+        webBrowser.onShowCustomView(
+            view,
+            callback,
+            ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+        )
     }
 
 
