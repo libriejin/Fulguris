@@ -38,6 +38,7 @@ import fulguris.view.webrtc.WebRtcPermissionsModel
 import fulguris.view.webrtc.WebRtcPermissionsView
 import io.reactivex.Scheduler
 import timber.log.Timber
+import fulguris.video.FullscreenVideoController
 
 /**
  * We have one instance of this per [WebView].
@@ -50,6 +51,7 @@ class WebPageChromeClient(
 
     private val geoLocationPermissions = arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)
     private val webBrowser: WebBrowser = activity as WebBrowser
+    private val fullscreenVideoController = FullscreenVideoController(activity)
 
 
     private val hiltEntryPoint = EntryPointAccessors.fromApplication(activity.applicationContext, HiltEntryPoint::class.java)
@@ -369,19 +371,27 @@ class WebPageChromeClient(
 
     override fun onHideCustomView() {
         Timber.d("onHideCustomView")
-        webBrowser.onHideCustomView()
+        fullscreenVideoController.hideFromWebChrome()
     }
 
     override fun onShowCustomView(view: View, callback: CustomViewCallback) {
         Timber.d("onShowCustomView")
-        webBrowser.onShowCustomView(view, callback)
+        fullscreenVideoController.show(
+            view = view,
+            callback = callback,
+            sourceWebView = webPageTab.webView
+        )
     }
 
 
     @Deprecated("Deprecated in Java")
     override fun onShowCustomView(view: View, requestedOrientation: Int, callback: CustomViewCallback) {
         Timber.d("onShowCustomView: $requestedOrientation")
-        webBrowser.onShowCustomView(view, callback, requestedOrientation)
+        fullscreenVideoController.show(
+            view = view,
+            callback = callback,
+            sourceWebView = webPageTab.webView
+        )
     }
 
 
