@@ -4523,7 +4523,6 @@ abstract class WebBrowserActivity : ThemedBrowserActivity(),
     }
 
     override fun onShowCustomView(view: View, callback: CustomViewCallback, requestedOrientation: Int) {
-        lockOrientationForVideoFullscreen()
         val currentTab = tabsManager.currentTab
         if (customView != null) {
             try {
@@ -4584,6 +4583,7 @@ abstract class WebBrowserActivity : ThemedBrowserActivity(),
                 Timber.d(e, "Failed to set PiP auto-enter params")
             }
         }
+        lockOrientationForVideoFullscreen()
     }
 
     override fun onHideCustomView() {
