@@ -162,7 +162,7 @@ abstract class WebBrowserActivity : ThemedBrowserActivity(),
         }
     
         requestedOrientation =
-            ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
+            ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
     }
     
     private fun restoreOrientationAfterVideoFullscreen() {
