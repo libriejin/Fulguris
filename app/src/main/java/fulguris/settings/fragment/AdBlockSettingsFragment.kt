@@ -265,6 +265,33 @@ class AdBlockSettingsFragment : AbstractSettingsFragment() {
 
 
     private fun showBlockList(entity: AbpEntity) {
+            // Personal build:
+    // Existing filter lists can only be updated.
+    // Users are not allowed to edit title, edit URL, replace file, or delete filter lists.
+        if (entity.entityId != 0) {
+            val builder = MaterialAlertDialogBuilder(requireContext())
+            val linearLayout = LinearLayout(context)
+            linearLayout.orientation = LinearLayout.VERTICAL
+
+            val updateListButton = Button(context)
+            updateListButton.text = resources.getString(R.string.blocklist_update)
+            updateListButton.setOnClickListener {
+                updateFilterList(entity, true)
+            }
+
+            linearLayout.addView(updateListButton)
+            linearLayout.setPadding(30, 10, 30, 10)
+
+            builder.setTitle(R.string.blocklist_update)
+            builder.setView(linearLayout)
+            builder.setNegativeButton(R.string.action_cancel, null)
+
+            val dialog = builder.create()
+            dialog.show()
+
+            return
+        }
+        
         val builder = MaterialAlertDialogBuilder(requireContext())
         var dialog: AlertDialog? = null
         builder.setTitle(R.string.action_edit)
