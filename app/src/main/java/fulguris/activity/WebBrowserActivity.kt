@@ -129,6 +129,7 @@ import kotlin.math.abs
 import kotlin.system.exitProcess
 import kotlin.time.TimeSource
 import kotlin.toString
+import android.content.pm.ActivityInfo
 
 
 /**
@@ -148,6 +149,32 @@ abstract class WebBrowserActivity : ThemedBrowserActivity(),
     // Only used to avoid setting up the same tab again
     // Don't use it for anything else as it can potentially get destroyed anytime
     private var lastTabView: View? = null
+
+    private var previousVideoRequestedOrientation: Int =
+        ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+
+    private var videoOrientationLocked: Boolean = false
+
+    private fun lockOrientationForVideoFullscreen() {
+        if (!videoOrientationLocked) {
+            previousVideoRequestedOrientation = requestedOrientation
+            videoOrientationLocked = true
+        }
+    
+        requestedOrientation =
+            ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
+    }
+    
+    private fun restoreOrientationAfterVideoFullscreen() {
+        if (!videoOrientationLocked) {
+            return
+        }
+    
+        requestedOrientation = previousVideoRequestedOrientation
+        previousVideoRequestedOrientation =
+            ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+        videoOrientationLocked = false
+    }
 
     // Our tab view back and front containers
     // We swap them as needed to make sure our view animations are performed smoothly and without flicker
@@ -4496,6 +4523,7 @@ abstract class WebBrowserActivity : ThemedBrowserActivity(),
     }
 
     override fun onShowCustomView(view: View, callback: CustomViewCallback, requestedOrientation: Int) {
+        lockOrientationForVideoFullscreen()
         val currentTab = tabsManager.currentTab
         if (customView != null) {
             try {
@@ -4619,6 +4647,7 @@ abstract class WebBrowserActivity : ThemedBrowserActivity(),
                 Timber.d(e, "Failed to clear PiP auto-enter params")
             }
         }
+        restoreOrientationAfterVideoFullscreen()
     }
 
     private inner class VideoCompletionListener : MediaPlayer.OnCompletionListener, MediaPlayer.OnErrorListener {
