@@ -64,7 +64,7 @@
         a:icon="@drawable/ic_power_input"
         a:iconSpaceReserved="false"
         a:singleLineTitle="false"
-        tools:defaultValue="true" />
+        tools:defaultValue="false" />
 
 
     <x.SwitchPreference
