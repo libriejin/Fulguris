@@ -150,30 +150,32 @@ abstract class WebBrowserActivity : ThemedBrowserActivity(),
     // Don't use it for anything else as it can potentially get destroyed anytime
     private var lastTabView: View? = null
 
-    private var previousVideoRequestedOrientation: Int =
-        ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
-
-    private var videoOrientationLocked: Boolean = false
+    private var videoOrientationLocked = false
 
     private fun lockOrientationForVideoFullscreen() {
-        if (!videoOrientationLocked) {
-            previousVideoRequestedOrientation = requestedOrientation
-            videoOrientationLocked = true
-        }
+    
+        videoOrientationLocked = true
     
         requestedOrientation =
             ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
     }
     
     private fun restoreOrientationAfterVideoFullscreen() {
+    
         if (!videoOrientationLocked) {
             return
         }
     
-        requestedOrientation = previousVideoRequestedOrientation
-        previousVideoRequestedOrientation =
-            ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+    
         videoOrientationLocked = false
+    
+    
+        window.decorView.postDelayed({
+    
+            requestedOrientation =
+                ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+    
+        }, 300)
     }
 
     // Our tab view back and front containers
