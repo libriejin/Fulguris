@@ -77,10 +77,18 @@ val ABP_ENTITY_EASYLIST = AbpEntity(title = "EasyList", entityId = 2, url = "htt
 val ABP_ENTITY_EASYPRIVACY = AbpEntity(title = "EasyPrivacy", entityId = 3, url = "https://easylist.to/easylist/easyprivacy.txt", homePage = "https://easylist.to")
 val ABP_ENTITY_URLHAUS = AbpEntity(title = "Urlhaus Malicious URL Blocklist", entityId = 4, url = "https://raw.githubusercontent.com/curbengh/urlhaus-filter/master/urlhaus-filter-agh-online.txt", homePage = "https://gitlab.com/curben/urlhaus-filter")
 val ABP_ENTITY_STEVEN_BLACK = AbpEntity(title = "StevenBlack hosts list", entityId = 5, url = "https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts", homePage = "https://github.com/StevenBlack/hosts", enabled = false)
+val ABP_ENTITY_GITEE_FILTER_GATE = AbpEntity(
+    title = "Gitee Filter Gate",
+    entityId = 6,
+    url = "https://gitee.com/libriejin_1/filter-gate/raw/master/hosts",
+    homePage = "https://gitee.com/libriejin_1/filter-gate",
+    enabled = true
+)
 
 val ABP_DEFAULT_ENTITIES = setOf(
     ABP_ENTITY_EASYLIST.toString(),
     ABP_ENTITY_EASYPRIVACY.toString(),
     ABP_ENTITY_URLHAUS.toString(),
     ABP_ENTITY_STEVEN_BLACK.toString(),
+    ABP_ENTITY_GITEE_FILTER_GATE.toString(),
 )
