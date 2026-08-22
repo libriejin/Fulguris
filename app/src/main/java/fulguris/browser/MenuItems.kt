@@ -77,6 +77,34 @@ object MenuItems {
             canBeInTabMenu = true,
             defaultMenu = MenuType.MainMenu
         ),
+        MenuItemId.AddCurrentDomainToGiteeHosts to MenuItem(
+            id = MenuItemId.AddCurrentDomainToGiteeHosts,
+            labelId = R.string.action_add_current_domain_to_gitee_hosts,
+            iconId = R.drawable.ic_block,
+            viewId = R.id.menuItemAddCurrentDomainToGiteeHosts,
+            canBeInMainMenu = true,
+            canBeInTabMenu = true,
+            defaultMenu = MenuType.MainMenu
+        ),
+        MenuItemId.Pip to MenuItem(
+            id = MenuItemId.Pip,
+            labelId = R.string.action_pip,
+            iconId = R.drawable.ic_picture_in_picture,
+            viewId = R.id.menuItemPip,
+            canBeInMainMenu = true,
+            canBeInTabMenu = true,
+            defaultMenu = MenuType.HiddenMenu,
+            preferredMenu = MenuType.MainMenu
+        ),
+        MenuItemId.DesktopMode to MenuItem(
+            id = MenuItemId.DesktopMode,
+            labelId = R.string.agent_desktop,
+            iconId = R.drawable.ic_desktop,
+            viewId = R.id.menuItemDesktopMode,
+            canBeInMainMenu = true,
+            canBeInTabMenu = true,
+            defaultMenu = MenuType.MainMenu
+        ),
         MenuItemId.Bookmarks to MenuItem(
             id = MenuItemId.Bookmarks,
             labelId = R.string.action_bookmarks,
@@ -199,15 +227,6 @@ object MenuItems {
             canBeInTabMenu = true,
             defaultMenu = MenuType.TabMenu
         ),
-        MenuItemId.AdBlock to MenuItem(
-            id = MenuItemId.AdBlock,
-            labelId = R.string.block_ads,
-            iconId = R.drawable.ic_block,
-            viewId = R.id.menuItemAdBlock,
-            canBeInMainMenu = false,
-            canBeInTabMenu = false,
-            defaultMenu = MenuType.TabMenu
-        ),
         MenuItemId.DarkMode to MenuItem(
             id = MenuItemId.DarkMode,
             labelId = R.string.theme_dark,
@@ -217,29 +236,11 @@ object MenuItems {
             canBeInTabMenu = true,
             defaultMenu = MenuType.TabMenu
         ),
-        MenuItemId.DesktopMode to MenuItem(
-            id = MenuItemId.DesktopMode,
-            labelId = R.string.agent_desktop,
-            iconId = R.drawable.ic_desktop,
-            viewId = R.id.menuItemDesktopMode,
-            canBeInMainMenu = true,
-            canBeInTabMenu = true,
-            defaultMenu = MenuType.TabMenu
-        ),
         MenuItemId.DomainSettings to MenuItem(
             id = MenuItemId.DomainSettings,
             labelId = R.string.pref_title_domains,
             iconId = R.drawable.ic_domain,
             viewId = R.id.menuItemDomainSettings,
-            canBeInMainMenu = true,
-            canBeInTabMenu = true,
-            defaultMenu = MenuType.TabMenu
-        ),
-        MenuItemId.AddCurrentDomainToGiteeHosts to MenuItem(
-            id = MenuItemId.AddCurrentDomainToGiteeHosts,
-            labelId = R.string.action_add_current_domain_to_gitee_hosts,
-            iconId = R.drawable.ic_block,
-            viewId = R.id.menuItemAddCurrentDomainToGiteeHosts,
             canBeInMainMenu = true,
             canBeInTabMenu = true,
             defaultMenu = MenuType.TabMenu
@@ -311,16 +312,6 @@ object MenuItems {
             defaultMenu = MenuType.HiddenMenu,
             preferredMenu = MenuType.TabMenu
         ),
-        MenuItemId.Pip to MenuItem(
-            id = MenuItemId.Pip,
-            labelId = R.string.action_pip,
-            iconId = R.drawable.ic_picture_in_picture,
-            viewId = R.id.menuItemPip,
-            canBeInMainMenu = true,
-            canBeInTabMenu = true,
-            defaultMenu = MenuType.HiddenMenu,
-            preferredMenu = MenuType.TabMenu
-        ),
         MenuItemId.LaunchApp to MenuItem(
             id = MenuItemId.LaunchApp,
             labelId = R.string.action_launch_app,
@@ -328,6 +319,15 @@ object MenuItems {
             viewId = R.id.menuItemLaunchApp,
             canBeInMainMenu = true,
             canBeInTabMenu = true,
+            defaultMenu = MenuType.TabMenu
+        ),
+        MenuItemId.AdBlock to MenuItem(
+            id = MenuItemId.AdBlock,
+            labelId = R.string.block_ads,
+            iconId = R.drawable.ic_block,
+            viewId = R.id.menuItemAdBlock,
+            canBeInMainMenu = false,
+            canBeInTabMenu = false,
             defaultMenu = MenuType.TabMenu
         ),
         MenuItemId.FullMenu to MenuItem(
@@ -338,7 +338,7 @@ object MenuItems {
             canBeInMainMenu = true,
             canBeInTabMenu = true,
             defaultMenu = MenuType.HiddenMenu,
-            preferredMenu = MenuType.MainMenu
+            preferredMenu = MenuType.TabMenu
         )
     )
 
