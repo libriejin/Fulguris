@@ -14,7 +14,7 @@
 
     <x.PreferenceCategory android:title="@string/pref_category_on_tab_change">
         <x.SwitchPreference
-            android:defaultValue="true"
+            android:defaultValue="false"
             android:key="@string/pref_key_on_tab_change_show_animation"
             android:title="@string/pref_title_show_animation"
             a:icon="@drawable/ic_animation"
@@ -62,7 +62,7 @@
 
     <x.PreferenceCategory android:title="@string/pref_category_on_tab_back_forward">
         <x.SwitchPreference
-            android:defaultValue="true"
+            android:defaultValue="false"
             android:key="@string/pref_key_on_tab_back_show_animation"
             android:title="@string/pref_title_show_animation"
             a:icon="@drawable/ic_animation"
@@ -92,7 +92,7 @@
 
     <x.PreferenceCategory android:title="@string/settings_category_on_follow_link">
         <x.SwitchPreference
-            android:defaultValue="true"
+            android:defaultValue="false"
             android:key="@string/pref_key_on_page_started_show_animation"
             android:title="@string/pref_title_show_animation"
             a:icon="@drawable/ic_animation"
